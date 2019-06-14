@@ -1,14 +1,19 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Ionic Blank
+      Perfis
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="abrir_modal()">
+          <ion-icon name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-slides>
-    <ion-slide *ngFor="let perfil of perfis">
+    <ion-slide *ngFor="let perfil of novo_perfis">
       <ion-card>
         <img src="{{perfil.avatar}}" alt="Avatar">
         <ion-card-header>
@@ -18,11 +23,12 @@
 
         <ion-card-content>
          <ion-item>
-           <ion-icon name="heart-empty" slot="start"></ion-icon>
+           <ion-icon name="heart-empty" slot="end" (click)="likes(perfil)"></ion-icon>
            <ion-badge color="success" slot="end">{{perfil.likes}}</ion-badge>
          </ion-item>
         </ion-card-content>
       </ion-card>
     </ion-slide>
   </ion-slides>
+
 </ion-content>

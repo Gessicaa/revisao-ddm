@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { PerfilModalPage } from '../perfil-modal/perfil-modal.page';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-home',
@@ -9,22 +12,34 @@ export class HomePage {
 
   perfis = []
 
-  constructor() {
-    this.perfis = [
-      {
-        'avatar': 'http://www.diarioonline.com.br/app/painel/modulo-noticia/img/imagensdb/original/destaque-598642-gabriel.jpeg',
-        'nome': 'Gabriel Diniz',
-        'idade': 28,
-        'likes': 0
-      },
-
-      {
-        'avatar': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/20180610_FIFA_Friendly_Match_Austria_vs._Brazil_Gabriel_Jesus_850_1688.jpg/250px-20180610_FIFA_Friendly_Match_Austria_vs._Brazil_Gabriel_Jesus_850_1688.jpg',
-        'nome': 'Gabriel Jesus',
-        'idade': 25,
-        'likes': 0
+  constructor(public modalController: ModalController, private storage: Storage) {
+    this.storage.get('perfil').then((perfil) => {
+      if (perfil) {
+        this.perfis = perfil
       }
-    ]
+    })
   }
 
+  add(perfil) {
+    this.perfis.push(perfil)
+    this.storage.set('perfil', this.perfis)
+  }
+
+  async abrir_modal() {
+    let modal = await this.modalController.create({
+      component: PerfilModalPage
+    });
+
+    modal.onDidDismiss().then((perfil) => {
+      this.add(perfil);
+    });
+
+    await modal.present();
+
+  }
+
+  likes(perfil) {
+    perfil.likes = perfil.likes + 1;
+  }
+  
 }
